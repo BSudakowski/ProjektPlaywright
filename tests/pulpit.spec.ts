@@ -1,23 +1,25 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Pulpit Tests', () => {
-  test('Payment Happy Path', async ({ page }) => {
-    //Arange
+  test.beforeEach(async ({ page }) => {
     const url = 'https://demo-bank.vercel.app/';
     const userID = 'testerBS';
     const userPassword = 'bartekkk';
 
+    await page.goto(url);
+    await page.getByTestId('login-input').fill(userID);
+    await page.getByTestId('password-input').fill(userPassword);
+    await page.getByTestId('login-button').click();
+  });
+
+  test('Payment Happy Path', async ({ page }) => {
+    //Arange
     const receiverId = '2';
     const transferAmount = '150';
     const transferTitle = 'pizza';
     const expectedTransferReceiver = 'Chuck Demobankowy';
 
     //Act
-    await page.goto(url);
-    await page.getByTestId('login-input').fill(userID);
-    await page.getByTestId('password-input').fill(userPassword);
-    await page.getByTestId('login-button').click();
-
     await page.locator('#widget_1_transfer_receiver').selectOption(receiverId);
     await page.locator('#widget_1_transfer_amount').fill(transferAmount);
     await page.locator('#widget_1_transfer_title').fill(transferTitle);
@@ -33,20 +35,11 @@ test.describe('Pulpit Tests', () => {
 
   test('Mobile Top-up Happy Path', async ({ page }) => {
     //Arange
-    const url = 'https://demo-bank.vercel.app/';
-    const userID = 'testerBS';
-    const userPassword = 'bartekkk';
-
     const topupReceiver = '502 xxx xxx';
     const topupAmount = '19';
     const expectedMessage = `Doładowanie wykonane! ${topupAmount},00PLN na numer ${topupReceiver}`;
 
     //Act
-    await page.goto(url);
-    await page.getByTestId('login-input').fill(userID);
-    await page.getByTestId('password-input').fill(userPassword);
-    await page.getByTestId('login-button').click();
-
     await page.locator('#widget_1_topup_receiver').selectOption(topupReceiver);
     await page.locator('#widget_1_topup_amount').fill(topupAmount);
     await page.locator('#uniform-widget_1_topup_agreement span').click();
