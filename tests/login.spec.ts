@@ -1,7 +1,6 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('User login to demobank', () => {
-
   test('Login Happy Path', async ({ page }) => {
     //Arange
     const url = 'https://demo-bank.vercel.app/';
@@ -24,7 +23,9 @@ test.describe('User login to demobank', () => {
     await page.getByTestId('login-input').fill('teste');
     await page.getByTestId('password-input').click();
 
-    await expect(page.getByTestId('error-login-id')).toHaveText('identyfikator ma min. 8 znaków');
+    await expect(page.getByTestId('error-login-id')).toHaveText(
+      'identyfikator ma min. 8 znaków',
+    );
   });
 
   test('Login unsucesfull - too short password', async ({ page }) => {
@@ -33,7 +34,8 @@ test.describe('User login to demobank', () => {
     await page.getByTestId('password-input').fill('bartk');
     await page.getByTestId('password-input').blur();
 
-    await expect(page.getByTestId('error-login-password')).toHaveText('hasło ma min. 8 znaków');
+    await expect(page.getByTestId('error-login-password')).toHaveText(
+      'hasło ma min. 8 znaków',
+    );
   });
-
 });
