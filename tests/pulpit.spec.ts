@@ -39,6 +39,7 @@ test.describe('Pulpit Tests', () => {
 
     const topupReceiver = '502 xxx xxx';
     const topupAmount = '19';
+    const expectedMessage = `Doładowanie wykonane! ${topupAmount},00PLN na numer ${topupReceiver}`;
 
     //Act
     await page.goto(url);
@@ -52,8 +53,7 @@ test.describe('Pulpit Tests', () => {
     await page.getByRole('button', { name: 'doładuj telefon' }).click();
     await page.getByTestId('close-button').click();
 
-    await expect(page.locator('#show_messages')).toHaveText(
-      `Doładowanie wykonane! ${topupAmount},00PLN na numer ${topupReceiver}`,
-    );
+    //Assert
+    await expect(page.locator('#show_messages')).toHaveText(expectedMessage);
   });
 });
