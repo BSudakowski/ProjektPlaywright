@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Pulpit Tests', () => {
-  test.only('Payment Happy Path', async ({ page }) => {
+  test('Payment Happy Path', async ({ page }) => {
     //Arange
     const url = 'https://demo-bank.vercel.app/';
     const userID = 'testerBS';
@@ -36,7 +36,9 @@ test.describe('Pulpit Tests', () => {
     const url = 'https://demo-bank.vercel.app/';
     const userID = 'testerBS';
     const userPassword = 'bartekkk';
-    const expectedUserName = 'Jan Demobankowy';
+
+    const topupReceiver = '502 xxx xxx';
+    const topupAmount = '19';
 
     //Act
     await page.goto(url);
@@ -44,14 +46,14 @@ test.describe('Pulpit Tests', () => {
     await page.getByTestId('password-input').fill(userPassword);
     await page.getByTestId('login-button').click();
 
-    await page.locator('#widget_1_topup_receiver').selectOption('502 xxx xxx');
-    await page.locator('#widget_1_topup_amount').fill('19');
+    await page.locator('#widget_1_topup_receiver').selectOption(topupReceiver);
+    await page.locator('#widget_1_topup_amount').fill(topupAmount);
     await page.locator('#uniform-widget_1_topup_agreement span').click();
     await page.getByRole('button', { name: 'doładuj telefon' }).click();
     await page.getByTestId('close-button').click();
 
     await expect(page.locator('#show_messages')).toHaveText(
-      'Doładowanie wykonane! 19,00PLN na numer 502 xxx xxx',
+      `Doładowanie wykonane! ${topupAmount},00PLN na numer ${topupReceiver}`,
     );
   });
 });
